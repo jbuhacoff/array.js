@@ -25,12 +25,60 @@ THE SOFTWARE.
 Version: 0.1
 Requires: no dependencies
 
-References & credits:
-http://stackoverflow.com/questions/3954438/remove-item-from-array-by-value
-
 */
 
-// older browsers may not have Array.indexOf
+/**
+ * Older browsers may not have Array.indexOf
+ * 
+ * Credits:
+ * This portion adapted from
+ * of https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf?redirectlocale=en-US&redirectslug=JavaScript%2FReference%2FGlobal_Objects%2FArray%2FindexOf
+ * by Mozilla Contributors
+ * licensed http://creativecommons.org/licenses/by-sa/3.0/
+ */
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
+    'use strict';
+    if (this == null) {
+      throw new TypeError();
+    }
+    var n, k, t = Object(this),
+        len = t.length >>> 0;
+
+    if (len === 0) {
+      return -1;
+    }
+    n = 0;
+    if (arguments.length > 1) {
+      n = Number(arguments[1]);
+      if (n != n) { // shortcut for verifying if it's NaN
+        n = 0;
+      } else if (n != 0 && n != Infinity && n != -Infinity) {
+        n = (n > 0 || -1) * Math.floor(Math.abs(n));
+      }
+    }
+    if (n >= len) {
+      return -1;
+    }
+    for (k = n >= 0 ? n : Math.max(len - Math.abs(n), 0); k < len; k++) {
+      if (k in t && t[k] === searchElement) {
+        return k;
+      }
+    }
+    return -1;
+  };
+}
+
+/**
+ * Older browsers may not have Array.indexOf
+ * 
+ * Credits:
+ * This portion adapted from
+ * of http://stackoverflow.com/questions/3954438/remove-item-from-array-by-value 
+ * by http://stackoverflow.com/users/80860/kennebec
+ * licensed http://creativecommons.org/licenses/by-sa/3.0/
+ */
+/*
 if(!Array.prototype.indexOf) {
     Array.prototype.indexOf = function(valueToFind, startIndex) {
         startIndex = startIndex || 0;
@@ -43,11 +91,18 @@ if(!Array.prototype.indexOf) {
         return -1;
     };
 }
+*/
 
 /**
  * Arguments:  one or more values to remove from the array
  * Post-condition: all elements in the array that have the same value as any one of the arguments are removed
  * Example:   ['e','b','b','c','z'].removeAll('b','c')  == ['e','z']
+ * 
+ * Credits:
+ * This portion adapted from
+ * of http://stackoverflow.com/questions/3954438/remove-item-from-array-by-value 
+ * by http://stackoverflow.com/users/80860/kennebec
+ * licensed http://creativecommons.org/licenses/by-sa/3.0/
  */
 Array.prototype.removeAll = function() {
     var valueToRemove, argIndex = arguments.length, foundAtIndex; 
